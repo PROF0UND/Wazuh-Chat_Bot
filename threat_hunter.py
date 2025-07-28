@@ -18,6 +18,7 @@ import sys
 from fastapi import Depends, status, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 import secrets
+from elasticsearch import Elasticsearch
 
 app = FastAPI()
 security = HTTPBasic()
@@ -30,8 +31,8 @@ qa_chain = None
 context = None
 days_range = 7
 
-username="<USERNAME>"
-password="<PASSWORD>"
+username="Profound"
+password="1872"
 ssh_username = "<SSH_USERNAME>"
 ssh_password = "<SSH_PASSWORD>"
 remote_host = None
@@ -57,45 +58,33 @@ def run_daemon():
         uvicorn.run(app, host="0.0.0.0", port=8000)
 
 def load_logs_from_days(past_days=7):
-    if remote_host:
-        return load_logs_from_remote(remote_host, ssh_username, ssh_password, past_days)
+    es = Elasticsearch("http://localhost:9200")  # Update with your actual Elasticsearch endpoint
 
-    logs = []
-    today = datetime.now()
-    for i in range(past_days):
-        day = today - timedelta(days=i)
-        year = day.year
-        month_name = day.strftime("%b")
-        day_num = day.strftime("%d")
+    now = datetime.utcnow()
+    seven_days_ago = now - timedelta(days=past_days)
 
-        json_path = f"/var/ossec/logs/archives/{year}/{month_name}/ossec-archive-{day_num}.json"
-        gz_path = f"/var/ossec/logs/archives/{year}/{month_name}/ossec-archive-{day_num}.json.gz"
+    query = {
+        "query": {
+            "range": {
+                "@timestamp": {
+                    "gte": seven_days_ago.isoformat(),
+                    "lte": now.isoformat()
+                }
+            }
+        },
+        "sort": [
+            {"@timestamp": {"order": "desc"}}
+        ],
+        "size": 10000  # max without scroll; consider paginating or scrolling for more
+    }
 
-        file_path = None
-        open_func = None
-
-        if os.path.exists(json_path) and os.path.getsize(json_path) > 0:
-            file_path = json_path
-            open_func = open
-        elif os.path.exists(gz_path) and os.path.getsize(gz_path) > 0:
-            file_path = gz_path
-            open_func = gzip.open
-        else:
-            print(f"⚠️ Log file missing or empty: {json_path} / {gz_path}")
-            continue
-
-        try:
-            with open_func(file_path, 'rt', encoding='utf-8', errors='ignore') as f:
-                for line in f:
-                    if line.strip():
-                        try:
-                            log = json.loads(line.strip())
-                            logs.append(log)
-                        except json.JSONDecodeError:
-                            print(f"⚠️ Skipping invalid JSON line in {file_path}")
-        except Exception as e:
-            print(f"⚠️ Error reading {file_path}: {e}")
-    return logs
+    try:
+        response = es.search(index="wazuh-alerts-*", body=query)
+        logs = [hit["_source"] for hit in response["hits"]["hits"]]
+        return logs
+    except Exception as e:
+        print(f"❌ Elasticsearch query failed: {e}")
+        return []
     
 def load_logs_from_remote(host, user, password, past_days):
     import paramiko
