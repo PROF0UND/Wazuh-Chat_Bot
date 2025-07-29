@@ -1,6 +1,5 @@
 # Wazuh-MCP-Server
 
----
 
 ## The threat hunter file:
 
