@@ -58,7 +58,11 @@ def run_daemon():
         uvicorn.run(app, host="0.0.0.0", port=8000)
 
 def load_logs_from_days(past_days=7):
-    es = Elasticsearch("http://localhost:9200")  # Update with your actual Elasticsearch endpoint
+    es = Elasticsearch(
+            "https://localhost:9200",
+            basic_auth=("elastic", "en*4XhvQRwGAoBmFRnBG"),
+            verify_certs=False
+        )  # Update with your actual Elasticsearch endpoint
 
     now = datetime.utcnow()
     seven_days_ago = now - timedelta(days=past_days)
