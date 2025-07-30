@@ -70,14 +70,14 @@ def load_logs_from_days(past_days=7):
     query = {
         "query": {
             "range": {
-                "@timestamp": {
+                "timestamp": {
                     "gte": seven_days_ago.isoformat(),
                     "lte": now.isoformat()
                 }
             }
         },
         "sort": [
-            {"@timestamp": {"order": "desc"}}
+            {"timestamp": {"order": "desc"}}
         ],
         "size": 10000  # max without scroll; consider paginating or scrolling for more
     }
