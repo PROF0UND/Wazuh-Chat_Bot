@@ -13,9 +13,11 @@ curl -fsSL https://ollama.com/install.sh | sh
 ollama pull llama3
 ```
 
-## The threat hunter file:
+## Files:
 
-- This python file runs a chatbot connected to the logs of wazuh
+1. ```Threat_hunter.py```: This python file runs a chatbot connected to the logs of wazuh.
+2. ```create_fake_log.py```: Creates a fake log on your elastic server.
+3. ```view_logs.py1```: Views the logs at a particular index.
 
 ## Requirements file
 
