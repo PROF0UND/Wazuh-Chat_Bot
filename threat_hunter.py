@@ -83,7 +83,7 @@ def load_logs_from_days(past_days=7):
     }
 
     try:
-        response = es.search(index="wazuh-alerts-*", body=query)
+        response = es.search(index="my-logs", body=query)
         logs = [hit["_source"] for hit in response["hits"]["hits"]]
         return logs
     except Exception as e:
@@ -143,6 +143,7 @@ def create_vectorstore(logs, embedding_model):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     documents = []
     for log in logs:
+        print("LOG: " , log)
         splits = text_splitter.split_text(log.get('full_log', ''))
         for chunk in splits:
             documents.append(Document(page_content=chunk))
@@ -455,4 +456,4 @@ if __name__ == "__main__":
     if args.daemon:
         run_daemon()
     else:
-        uvicorn.run(app, host="0.0.0.0", port=8000)
+        uvicorn.run(app, host="127.0.0.1", port=8000)

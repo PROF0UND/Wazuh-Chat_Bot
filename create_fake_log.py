@@ -1,3 +1,9 @@
+"""
+Creates a new fake log in the "my-logs" index
+To make the chatbot run on this log, change the index param in load_logs_from_days to "my-logs"
+"""
+
+
 from elasticsearch import Elasticsearch
 from datetime import datetime
 
