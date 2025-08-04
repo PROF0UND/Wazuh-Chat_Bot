@@ -60,7 +60,7 @@ def run_daemon():
 def load_logs_from_days(past_days=7):
     es = Elasticsearch(
             "https://localhost:9200",
-            basic_auth=("elastic", "en*4XhvQRwGAoBmFRnBG"),
+            basic_auth=("elastic", "<YOUR_ELASTIC_PASSWORD>"),
             verify_certs=False
         )  # Update with your actual Elasticsearch endpoint
 
@@ -83,7 +83,7 @@ def load_logs_from_days(past_days=7):
     }
 
     try:
-        response = es.search(index="my-logs", body=query)
+        response = es.search(index="my-logs", body=query) # change the index to your preffered one
         logs = [hit["_source"] for hit in response["hits"]["hits"]]
         return logs
     except Exception as e:
@@ -143,7 +143,6 @@ def create_vectorstore(logs, embedding_model):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     documents = []
     for log in logs:
-        print("LOG: " , log)
         splits = text_splitter.split_text(log.get('full_log', ''))
         for chunk in splits:
             documents.append(Document(page_content=chunk))

@@ -17,7 +17,7 @@ ollama pull llama3
 
 1. ```Threat_hunter.py```: This python file runs a chatbot connected to the logs of wazuh.
 2. ```create_fake_log.py```: Creates a fake log on your elastic server.
-3. ```view_logs.py1```: Views the logs at a particular index.
+3. ```view_logs.py```: Views the logs at a particular index.
 
 ## Requirements file
 
