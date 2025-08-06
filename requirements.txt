@@ -1,15 +1,14 @@
-pip install \
-    elasticsearch \
-    paramiko \
-    python-daemon \
-    langchain \
-    langchain-community \
-    langchain-ollama \
-    langchain-huggingface \
-    faiss-cpu \
-    sentence-transformers \
-    transformers \
-    pytz \
-    hf_xet \
-    fastapi \
-    uvicorn[standard]
+elasticsearch
+paramiko
+python-daemon
+langchain
+langchain-community
+langchain-ollama
+langchain-huggingface
+faiss-cpu
+sentence-transformers
+transformers
+pytz
+hf_xet
+fastapi
+uvicorn[standard]

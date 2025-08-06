@@ -24,7 +24,7 @@ ollama pull llama3
 - This file has all dependencies
 - To install all dependencies, type:
 ``` bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Notes
