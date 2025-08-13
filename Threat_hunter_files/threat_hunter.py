@@ -31,8 +31,8 @@ qa_chain = None
 context = None
 days_range = 7
 
-username="Profound"
-password="1872"
+username="<CHATBOT_USERNAME>"
+password="<CHATBOT_PASSWORD>"
 ssh_username = "<SSH_USERNAME>"
 ssh_password = "<SSH_PASSWORD>"
 remote_host = None
