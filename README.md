@@ -55,7 +55,7 @@ To reset or view the password:
 cd C:\ELK\elasticsearch-9.1.0\bin
 elasticsearch-reset-password.bat -u elastic
 ```
-Notes
+## Notes
 
 The chatbot requires a running Elasticsearch instance with Wazuh logs indexed.
 
