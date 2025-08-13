@@ -1,45 +1,63 @@
 # Wazuh-MCP-Server
 
-## Requirements:
+## Overview
 
-- This project requires ollama's llama3 to run.
-- To download, run:
-1. Install ```Ollama```
-``` bash
+This project integrates Wazuh logs with a chatbot powered by Ollama's LLaMA 3 language model, allowing you to query and analyze security data in natural language.It also includes utilities for generating and viewing logs in your Elasticsearch instance.
+
+## Prerequisites
+
+- Ollama installed on your system
+
+- LLaMA 3 model available locally
+
+- Elasticsearch server (local or remote)
+
+- Python 3.8+
+
+## Installation
+
+### 1. Install Ollama
+```
 curl -fsSL https://ollama.com/install.sh | sh
 ```
-2. Install the required Llama 3 LLM model:
+### 2. Download the LLaMA 3 model
 ```
 ollama pull llama3
 ```
-
-## Files:
-
-1. ```Threat_hunter.py```: This python file runs a chatbot connected to the logs of wazuh.
-2. ```create_fake_log.py```: Creates a fake log on your elastic server.
-3. ```view_logs.py```: Views the logs at a particular index.
-
-## Requirements file
-
-- This file has all dependencies
-- To install all dependencies, type:
-``` bash
+### 3. Install Python dependencies
+```
 pip install -r requirements.txt
 ```
+## Project Structure
 
-## Notes
+| File                 | Description                                                      |
+| -------------------- | ---------------------------------------------------------------- |
+| `Threat_hunter.py`   | Chatbot interface connected to Wazuh logs                        |
+| `create_fake_log.py` | Generates sample logs in your Elasticsearch server               |
+| `view_logs.py`       | Retrieves and displays logs from a specified Elasticsearch index |
+| `requirements.txt`   | Python dependencies list                              
 
-### Elasticsearch Password:
+## Elasticsearch Setup
 
-The following instructions are for Windows.
+### 1. Running Elasticsearch (Windows)
 
-- The elasticsearch file is saved in C:ELK
-- The default password is "elastic".
-- To check/regenerate password, type:
-``` bash
+If Elasticsearch is installed in C:\ELK, start it by running:
+```
+cd C:\ELK\elasticsearch-9.1.0\bin
+elasticsearch.bat
+```
+### 2. Default Password
+
+Default elastic user password: `elastic`
+
+To reset or view the password:
+```
 cd C:\ELK\elasticsearch-9.1.0\bin
 elasticsearch-reset-password.bat -u elastic
 ```
+Notes
 
-### Elasticsearch Setup:
-- To run elasticsearch, run the elasticsearch.bat file (Windows).
+The chatbot requires a running Elasticsearch instance with Wazuh logs indexed.
+
+The LLaMA 3 model must be loaded via Ollama before starting Threat_hunter.py.
+
