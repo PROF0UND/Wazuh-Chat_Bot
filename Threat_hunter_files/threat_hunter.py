@@ -89,55 +89,6 @@ def load_logs_from_days(past_days=7):
     except Exception as e:
         print(f"❌ Elasticsearch query failed: {e}")
         return []
-    
-def load_logs_from_remote(host, user, password, past_days):
-    import paramiko
-    logs = []
-    today = datetime.now()
-
-    try:
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(host, username=user, password=password, timeout=10)
-        sftp = ssh.open_sftp()
-
-        for i in range(past_days):
-            day = today - timedelta(days=i)
-            year = day.year
-            month_name = day.strftime("%b")
-            day_num = day.strftime("%d")
-            base_path = f"/var/ossec/logs/archives/{year}/{month_name}"
-            json_path = f"{base_path}/ossec-archive-{day_num}.json"
-            gz_path = f"{base_path}/ossec-archive-{day_num}.json.gz"
-
-            remote_file = None
-            try:
-                if sftp.stat(json_path).st_size > 0:
-                    remote_file = sftp.open(json_path, 'r')
-                elif sftp.stat(gz_path).st_size > 0:
-                    remote_file = gzip.GzipFile(fileobj=sftp.open(gz_path, 'rb'))
-            except IOError:
-                print(f"⚠️ Remote log not found or unreadable: {json_path} / {gz_path}")
-                continue
-
-            if remote_file:
-                try:
-                    for line in remote_file:
-                        if isinstance(line, bytes):
-                            line = line.decode('utf-8', errors='ignore')
-                        if line.strip():
-                            try:
-                                log = json.loads(line.strip())
-                                logs.append(log)
-                            except json.JSONDecodeError:
-                                print(f"⚠️ Skipping invalid JSON line from remote file.")
-                except Exception as e:
-                    print(f"⚠️ Error reading remote file: {e}")
-        sftp.close()
-        ssh.close()
-    except Exception as e:
-        print(f"❌ Remote connection failed: {e}")
-    return logs
 
 def create_vectorstore(logs, embedding_model):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
