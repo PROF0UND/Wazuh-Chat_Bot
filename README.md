@@ -28,6 +28,11 @@ ollama pull llama3
 ```
 pip install -r requirements.txt
 ```
+### 4. Change the Lines 34 and 35 to have the Chatbot's login info:
+```
+username="<CHATBOT_USERNAME>"
+password="<CHATBOT_PASSWORD>"
+```
 ## Project Structure
 
 | File                 | Description                                                      |
