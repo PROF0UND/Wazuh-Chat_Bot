@@ -31,8 +31,8 @@ qa_chain = None
 context = None
 days_range = 7
 
-username="root"
-password="1234"
+username="<CHATBOT_USERNAME>"
+password="<CHATBOT_PASSWORD>"
 ssh_username = "<SSH_USERNAME>"
 ssh_password = "<SSH_PASSWORD>"
 remote_host = None
@@ -64,7 +64,7 @@ def load_logs_from_days(past_days=7):
     """
     es = Elasticsearch(
             "https://localhost:9200",
-            basic_auth=("elastic", "en*4XhvQRwGAoBmFRnBG"),
+            basic_auth=("elastic", "<YOUR_ELASTIC_PASSWORD>"),
             verify_certs=False
         )  # Update with your actual Elasticsearch endpoint
 
