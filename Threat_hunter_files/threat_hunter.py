@@ -31,8 +31,8 @@ qa_chain = None
 context = None
 days_range = 7
 
-username="<CHATBOT_USERNAME>"
-password="<CHATBOT_PASSWORD>"
+username="root"
+password="1234"
 ssh_username = "<SSH_USERNAME>"
 ssh_password = "<SSH_PASSWORD>"
 remote_host = None
@@ -58,9 +58,13 @@ def run_daemon():
         uvicorn.run(app, host="0.0.0.0", port=8000)
 
 def load_logs_from_days(past_days=7):
+
+    """
+    Update Elastic login info here.
+    """
     es = Elasticsearch(
             "https://localhost:9200",
-            basic_auth=("elastic", "<YOUR_ELASTIC_PASSWORD>"),
+            basic_auth=("elastic", "en*4XhvQRwGAoBmFRnBG"),
             verify_certs=False
         )  # Update with your actual Elasticsearch endpoint
 
@@ -406,4 +410,7 @@ if __name__ == "__main__":
     if args.daemon:
         run_daemon()
     else:
+        """
+        Address of the chatbot
+        """
         uvicorn.run(app, host="127.0.0.1", port=8000)

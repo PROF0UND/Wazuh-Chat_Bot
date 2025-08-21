@@ -33,6 +33,14 @@ pip install -r requirements.txt
 username="<CHATBOT_USERNAME>"
 password="<CHATBOT_PASSWORD>"
 ```
+### 5. Change line 67 to hold your elastic credentials:
+```
+    es = Elasticsearch(
+            "https://localhost:9200",
+            basic_auth=("elastic", "<YOUR_ELASTIC_PASSWORD>"),
+            verify_certs=False
+        )  # Update with your actual Elasticsearch endpoint
+```
 ## Project Structure
 
 | File                 | Description                                                      |
@@ -61,6 +69,13 @@ cd C:\ELK\elasticsearch-9.1.0\bin
 elasticsearch-reset-password.bat -u elastic
 ```
 ## Notes
+
+### Address of the chatbot:
+The address of the chatbot is stored in the line `416`:
+```
+        uvicorn.run(app, host="127.0.0.1", port=8000)
+```
+If the address is being used and the chatbot runs into an error, simlpy change the address here.
 
 The chatbot requires a running Elasticsearch instance with Wazuh logs indexed.
 
